@@ -1,0 +1,5 @@
+.vscode
+*.code-workspace
+/managed_components
+/build
+*.old
