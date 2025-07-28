@@ -617,7 +617,7 @@ static void gatts_profile_event_handler(esp_gatts_cb_event_t event, esp_gatt_if_
     }
 }
 
-void ble_init(void)
+esp_err_t ble_init(void)
 {
     ESP_LOGI(TAG, "Initializing BLE...");
 
@@ -631,14 +631,14 @@ void ble_init(void)
     if (ret)
     {
         ESP_LOGE(GATTS_TAG, "%s initialize controller failed: %s", __func__, esp_err_to_name(ret));
-        return;
+        return ESP_FAIL;
     }
 
     ret = esp_bt_controller_enable(ESP_BT_MODE_BLE);
     if (ret)
     {
         ESP_LOGE(GATTS_TAG, "%s enable controller failed: %s", __func__, esp_err_to_name(ret));
-        return;
+       return ESP_FAIL;
     }
 
     esp_bluedroid_config_t bluedroid_cfg = BT_BLUEDROID_INIT_CONFIG_DEFAULT();
@@ -646,35 +646,35 @@ void ble_init(void)
     if (ret)
     {
         ESP_LOGE(GATTS_TAG, "%s init bluetooth failed: %s", __func__, esp_err_to_name(ret));
-        return;
+        return ESP_FAIL;
     }
 
     ret = esp_bluedroid_enable();
     if (ret)
     {
         ESP_LOGE(GATTS_TAG, "%s enable bluetooth failed: %s", __func__, esp_err_to_name(ret));
-        return;
+        return ESP_FAIL;
     }
 
     ret = esp_ble_gatts_register_callback(gatts_event_handler);
     if (ret)
     {
         ESP_LOGE(GATTS_TAG, "gatts register error, error code = %x", ret);
-        return;
+        return ESP_FAIL;
     }
 
     ret = esp_ble_gap_register_callback(gap_event_handler);
     if (ret)
     {
         ESP_LOGE(GATTS_TAG, "gap register error, error code = %x", ret);
-        return;
+        return ESP_FAIL;
     }
 
     ret = esp_ble_gatts_app_register(PROFILE_APP_ID);
     if (ret)
     {
         ESP_LOGE(GATTS_TAG, "gatts app register error, error code = %x", ret);
-        return;
+        return ESP_FAIL;
     }
 
     esp_err_t local_mtu_ret = esp_ble_gatt_set_local_mtu(128);
@@ -684,6 +684,6 @@ void ble_init(void)
         ESP_LOGE(GATTS_TAG, "set local  MTU failed, error code = %x", local_mtu_ret);
     }
 
-    return;
+    return ESP_OK;
 
 }

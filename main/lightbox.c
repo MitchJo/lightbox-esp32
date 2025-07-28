@@ -44,12 +44,15 @@ void app_main(void)
 
     ESP_LOGI(TAG, "Queue created successfully. Handle: %p", ble_data_queue);
 
-     if (led_init() == 0) {
+    if (led_init() != ESP_OK) {
         ESP_LOGE(TAG, "Failed to initialize leds.");
         return;
     }
 
-    ble_init();
+    if ( ble_init() != ESP_OK) {
+        ESP_LOGE(TAG, "Failed to initialize BLE.");
+        return;
+    }
 
     xTaskCreate(&led_manager_task, "led_manager", 4096, NULL, 4, NULL);
 

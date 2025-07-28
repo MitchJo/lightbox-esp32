@@ -22,7 +22,7 @@ typedef struct{
 
 led_strip_handle_t configure_led(void);
 
-int led_init();
+esp_err_t led_init();
 
 void led_manager_task(void *pvParameters);
 

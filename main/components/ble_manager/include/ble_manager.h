@@ -32,7 +32,7 @@ typedef struct {
     char json_data[MAX_JSON_DATA_SIZE];
 } ble_data_message_t;
 
-void ble_init(void);
+esp_err_t ble_init(void);
 
 
 #endif

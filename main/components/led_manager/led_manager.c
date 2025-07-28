@@ -339,18 +339,18 @@ static void parseData(const char *json_string)
     return;
 }
 
-int led_init()
+esp_err_t led_init()
 {
     led_handler = configure_led();
 
     if (led_handler == NULL)
     {
-        return 0;
+        return ESP_FAIL;
     }
 
     chaseColor(led_data.red, 0, 0);
 
-    return 1;
+    return ESP_OK;
 }
 
 void led_manager_task(void *pvParameters)
